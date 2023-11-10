@@ -11,14 +11,19 @@ const addBtn = document.querySelector("#add");
 const printBtn = document.querySelector("#print");
 const dialog = document.querySelector("dialog");
 const closeBtn = document.querySelector("#close");
+const defaultBtn = document.querySelector("#default");
+const choresBtn = document.querySelector("#chores");
 
 let dfault = new Project("Default");
+let chores = new Project("Chores");
 const app = new TodoList();
 app.addProject(dfault);
+app.addProject(chores);
 
 const printAll = function(e) {
     e.preventDefault();
-    console.log(dfault.viewAllTodos());
+    let project = app.getProject(app.getAppIndex());
+    console.log(project.viewAllTodos());
 }
 
 printBtn.addEventListener("click", printAll);
@@ -50,8 +55,9 @@ const addNew = function(e) {
         date.value,
         priority.value
         );
-    dfault.addTodo(todo);
-    addToScreen(todo);
+    let project = app.getProject(app.getAppIndex());
+    project.addTodo(todo);
+    // addToScreen(todo);
     dialog.close();
 }
 
@@ -70,3 +76,18 @@ const closeDialog = function(e) {
 }
 
 closeBtn.addEventListener('click', closeDialog);
+
+const selectProject = function(e) {
+    let index = parseInt(e.target.dataset.project);
+    app.updateIndex(index);
+    displayProjectTasks();
+}
+
+const displayProjectTasks = function() {
+    const project = app.getProject(app.getAppIndex());
+    console.log(project.viewAllTodos());
+}
+
+for (const button of [defaultBtn, choresBtn]) {
+    button.addEventListener("click", selectProject);
+}
