@@ -5,15 +5,60 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>TO-DO</title>
     <script src="index.js" type="module" defer></script>
+    <link rel="stylesheet" href="styles.css">
 </head>
 <body>
     <aside>
+        <h1>Todo</h1>
         <nav>
-            <button type="button" id="default" data-project="0">Default</button>
-            <button type="button" id="chores" data-project="1">Chores</button>
+            
+            <!-- <button type="button" id="default" data-project="0">Default</button>
+            <button type="button" id="chores" data-project="1">Chores</button> -->
         </nav>
     </aside>
-    <dialog>
+    <section>
+        <div>
+            <button type="button" id="add-project">Add project</button>
+            <button type="button" id="add-todo">Add todo</button>
+        </div>
+        <main>
+            <h2>Tasks</h2>
+            <div id="display-tasks"></div>
+            <div class="card">
+                <div class="card-head">
+                    <h2>A card</h2>
+                    <ul>
+                        <li><button type="button"><img class="card-icon" src="./assets/note-edit.svg" alt="Edit note"></button></li>
+                        <li><button type="button"><img class="card-icon" src="./assets/note-delete.svg" alt="Delete note"></button></li>
+                        <li><p>For priority</p></li>
+                    </ul>      
+                </div>
+                <div class="card-content">
+                    <p>Some text</p>
+                    <sub>Then date</sub>
+                </div>
+            </div>
+        </main>
+        
+    </section>
+    <!-- Dialogs -->
+    <!-- Add project -->
+    <dialog id="addProject">
+        <h3>Add Project</h3>
+        <button type="button" id="close">X</button>
+        <form>
+            <label for="project-name">Project name:</label>
+            <input type="text" id="project-name">
+
+            <label for="project-color">Project color</label>
+            <input type="text" id="project-color">
+
+            <button type="button" id="submit-project">Add +</button>
+        </form>
+    </dialog>
+
+    <!-- Add todo -->
+    <dialog id="addTodo">
         <h3>Add Todo</h3>
         <button type="button" id="close">X</button>
         <form>
@@ -32,10 +77,33 @@
                 <option value="Mid">Mid</option>
                 <option value="High">High</option>
             </select>
-            <button type="button" id="submit">Add +</button>
+            <button type="button" id="submit-todo">Add +</button>
         </form>
     </dialog>
-    <button type="button" id="add">Add todo</button>
-    <button type="button" id="print">Print todos</button>
+
+    <!-- Edit todo -->
+    <dialog id="todo-edit">
+        <h2 id="todo-edit-heading">Edit Todo</h2>
+        <button type="button" id="close">X</button>
+        <form>
+            <label for="edit-title">Title:</label>
+            <input type="text" id="edit-title">
+
+            <label for="edit-description">Description:</label>
+            <input type="text" id="edit-description">
+
+            <label for="edit-date">Date:</label>
+            <input type="text" id="edit-date">
+
+            <label for="edit-priority">Priority:</label>
+            <select name="priority" id="edit-priority">
+                <option value="Low">Low</option>
+                <option value="Mid">Mid</option>
+                <option value="High">High</option>
+            </select>
+            <input type="hidden" id="todo-idx">
+            <button type="button" id="submit-edit-todo">Done</button>
+        </form>
+    </dialog>
 </body>
 </html>

@@ -31,6 +31,6 @@ export default class Project {
     }
 
     removeTodo(index) {
-        this.todos.slice(index, 1);
+        this.todos.splice(index, 1);
     }
 }

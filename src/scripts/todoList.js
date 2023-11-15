@@ -13,6 +13,10 @@ export default class TodoList {
         return this.projects[index];
     }
 
+    getProjectLength() {
+        return this.projects.length;
+    }
+
     getAppIndex() {
         return this.#index;
     }
