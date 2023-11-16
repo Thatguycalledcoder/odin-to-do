@@ -97,41 +97,99 @@ const editTodo = function(e) {
 
 editBtn.addEventListener("click", editTodo)
 
-const addTaskToScreen = function(project, todo) {
-    const item = document.createElement("div");
+const addTaskToScreen = function(project, todo, task_idx) {
     const todo_title = document.createElement("h3");
+    todo_title.textContent = todo.title;
+
     const todo_description = document.createElement("p");
-    const todo_date = document.createElement("p");
+    todo_description.textContent = todo.description;
+
+    const todo_date = document.createElement("sub");
+    todo_date.textContent = todo.date;
+
     const todo_priority = document.createElement("p");
+    todo_priority.textContent = todo.priority;
+    
+    switch (todo_priority.textContent) {
+        case "Low":
+            todo_priority.style["color"] = "blue";
+            break;
+        case "Mid":
+            todo_priority.style["color"] = "orange";
+            break;
+        case "High":
+            todo_priority.style["color"] = "red";
+            break;
+        default:
+            break;
+    }
+    console.log("here")
+    
+    
     const deleteBtn = document.createElement("button");
-    let idx = project.getTodoCount() - 1;
     deleteBtn.type = "button";
-    deleteBtn.textContent = "Delete";
-    deleteBtn.dataset.index = idx;
+    deleteBtn.dataset.index = task_idx;
     deleteBtn.addEventListener("click", (e) => {
         let project = app.getProject(app.getAppIndex());
         let index = e.target.dataset.index;
         project.removeTodo(index);
-        e.target.parentNode.remove();
+        item.remove();
     });
 
     const editBtn = document.createElement("button");
     editBtn.type = "button";
-    editBtn.textContent = "Edit";
-    editBtn.dataset.index = idx;
+    editBtn.dataset.index = task_idx;
     editBtn.addEventListener("click", editModalShow);
 
-    todo_title.textContent = todo.title;
-    todo_description.textContent = todo.description;
-    todo_date.textContent = todo.date;
-    todo_priority.textContent = todo.priority;
+    const editImg = document.createElement("img");
+    editImg.classList.add("card-icon");
+    editImg.src = "./assets/note-edit.svg";
+    editImg.alt = "Edit note";
+    editImg.addEventListener("click", (e) => {
+        editBtn.dispatchEvent(new MouseEvent("click"))
+    });
 
-    item.appendChild(todo_title);
-    item.appendChild(todo_description);
-    item.appendChild(todo_date);
-    item.appendChild(todo_priority);
-    item.appendChild(editBtn);
-    item.appendChild(deleteBtn);
+    const deleteImg = document.createElement("img");
+    deleteImg.classList.add("card-icon");
+    deleteImg.src = "./assets/note-delete.svg";
+    deleteImg.alt = "Delete note";
+    deleteImg.addEventListener("click", (e) => {
+        deleteBtn.dispatchEvent(new MouseEvent("click"))
+    });
+
+    const item = document.createElement("div");
+    item.classList.add("card");
+    getComputedStyle(item, "border-left", `1px solid ${project.color}`);
+
+    const todo_actions = document.createElement("ul");
+
+    const todo_edit = document.createElement("li");
+    editBtn.appendChild(editImg);
+    todo_edit.appendChild(editBtn);
+
+    const todo_delete = document.createElement("li");
+    deleteBtn.appendChild(deleteImg);
+    todo_delete.appendChild(deleteBtn);
+
+    const todo_priority_sec = document.createElement("li");
+    todo_priority_sec.appendChild(todo_priority);
+
+    todo_actions.appendChild(todo_edit);
+    todo_actions.appendChild(todo_delete);
+    todo_actions.appendChild(todo_priority_sec);
+
+    const item_head = document.createElement("div");
+    item_head.classList.add("card-head");
+    item_head.appendChild(todo_title);
+    item_head.appendChild(todo_actions);
+
+    const item_content = document.createElement("div");
+    item_content.classList.add("card-content");
+    item_content.appendChild(todo_description);
+    item_content.appendChild(todo_date);
+
+    item.appendChild(item_head);
+    item.appendChild(item_content);
     display.appendChild(item);
 }
 
@@ -146,6 +204,7 @@ const addNewTask = function(e) {
     let project = app.getProject(app.getAppIndex());
     project.addTodo(todo);
     todoDialog.close();
+    displayProjectTasks();
 }
 
 submitTodoBtn.addEventListener('click', addNewTask);
@@ -169,7 +228,6 @@ const openDialog = function(e) {
     todoDialog.show();
 }
 
-for (const button of [addTodoBtn, addProjectBtn]) {}
 addTodoBtn.addEventListener('click', openDialog);
 
 addProjectBtn.addEventListener('click', () => {
@@ -190,9 +248,11 @@ const displayProjectTasks = function() {
     const project = app.getProject(app.getAppIndex());
     let tasks = project.viewAllTodos();
     display.textContent = "";
+    let task_idx = 0;
     if (tasks.length > 0) {
         tasks.forEach((task) => {
-            addTaskToScreen(project, task)
+            addTaskToScreen(project, task, task_idx);
+            task_idx++;
         });
     }
 }
@@ -202,3 +262,4 @@ for (const project of app.projects) {
     app.updateIndex(app.getAppIndex() + 1);
 }
 
+app.updateIndex(0);

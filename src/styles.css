@@ -39,6 +39,8 @@ section {
 }
 section > div {
     padding: 2rem 3rem;
+    display: flex;
+    justify-content: space-between;
 }
 section main {
     padding: 0.5rem 0rem 3rem 2rem;
@@ -51,6 +53,7 @@ section main {
     width: 40%;
     border-left: 1rem solid red;
     padding: 1rem;
+    margin: 1rem;
 }
 .card-head {
     display: flex;
@@ -69,7 +72,9 @@ section main {
     border: none;
 }
 .card-icon {
+    padding-top: 0.3rem;
     width: 1.2rem;
+    height: 1.2rem;
     cursor: pointer;
 }
 .card-head > ul > li button:hover {
